@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "node server.js",
     "build:client": "vite build --outDir dist/client",
-    "build:server": "vite build --outDir dist/server --ssr src/entry-server.js"
+    "build:server": "vite build --outDir dist/server --ssr src/entry-server.tsx",
+    "start:prod": "cross-env NODE_ENV=production node server.js"
   },
   "dependencies": {
     "@emotion/css": "^11.10.6",
@@ -29,6 +30,7 @@
     "@typescript-eslint/eslint-plugin": "^5.55.0",
     "@typescript-eslint/parser": "^5.55.0",
     "@vitejs/plugin-react-swc": "^3.0.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.36.0",
     "eslint-plugin-react": "^7.32.2",
     "sass": "^1.59.3",

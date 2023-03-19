@@ -4,6 +4,8 @@ import { fileURLToPath } from 'node:url'
 import express from 'express'
 import { createServer as createViteServer } from 'vite'
 
+const isProd = process.env.NODE_ENV === 'production'
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const port = 5173
 
@@ -26,21 +28,38 @@ async function createServer() {
     const url = req.originalUrl
 
     try {
-      // 1. Read index.html
-      let template = fs.readFileSync(
-        path.resolve(__dirname, 'index.html'),
-        'utf-8',
-      )
+      let template, render
 
-      // 2. Apply Vite HTML transforms. This injects the Vite HMR client,
-      //    and also applies HTML transforms from Vite plugins, e.g. global
-      //    preambles from @vitejs/plugin-react
-      template = await vite.transformIndexHtml(url, template)
+      if (!isProd) {
+        console.log('development mode');
+        // 1. Read index.html
+        template = fs.readFileSync(
+          path.resolve(__dirname, 'index.html'),
+          'utf-8',
+        )
 
-      // 3. Load the server entry. ssrLoadModule automatically transforms
-      //    ESM source code to be usable in Node.js! There is no bundling
-      //    required, and provides efficient invalidation similar to HMR.
-      const { render } = await vite.ssrLoadModule('/src/entry-server.tsx')
+        // 2. Apply Vite HTML transforms. This injects the Vite HMR client,
+        //    and also applies HTML transforms from Vite plugins, e.g. global
+        //    preambles from @vitejs/plugin-react
+        template = await vite.transformIndexHtml(url, template)
+
+        // 3. Load the server entry. ssrLoadModule automatically transforms
+        //    ESM source code to be usable in Node.js! There is no bundling
+        //    required, and provides efficient invalidation similar to HMR.
+        render = await vite.ssrLoadModule('/src/entry-server.tsx').render
+      } else {
+        console.log('production mode');
+        // 1. Read index.html
+        template = fs.readFileSync(
+          path.resolve(__dirname, 'dist/client/index.html'),
+          'utf-8',
+        )
+
+        // 2: Not need to use vite, we are in prod.
+
+        // 3. Load the server entry. Read directly the production file
+        render = (await import('./dist/server/entry-server.js')).render
+      }
 
       // 4. render the app HTML. This assumes entry-server.js's exported
       //     `render` function calls appropriate framework SSR APIs,
