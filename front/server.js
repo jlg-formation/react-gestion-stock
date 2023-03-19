@@ -52,7 +52,7 @@ async function createServer() {
         // 3. Load the server entry. ssrLoadModule automatically transforms
         //    ESM source code to be usable in Node.js! There is no bundling
         //    required, and provides efficient invalidation similar to HMR.
-        render = await vite.ssrLoadModule('/src/entry-server.tsx').render
+        render = (await vite.ssrLoadModule('/src/entry-server.tsx')).render
       } else {
         console.log('production mode')
         // 1. Read index.html
