@@ -8,7 +8,6 @@
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended"
   ],
-  "overrides": [],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": "latest",
@@ -20,5 +19,14 @@
     "react/react-in-jsx-scope": "off",
     "react/no-unknown-property": ["error", { "ignore": ["css"] }],
     "no-else-return": "error"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["server.js"],
+      "env": {
+        "node": true,
+        "es2021": true
+      }
+    }
+  ]
 }
