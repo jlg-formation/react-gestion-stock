@@ -12,17 +12,23 @@ const port = 5173
 async function createServer() {
   const app = express()
 
-  // Create Vite server in middleware mode and configure the app type as
-  // 'custom', disabling Vite's own HTML serving logic so parent server
-  // can take control
-  const vite = await createViteServer({
-    server: { middlewareMode: true },
-    appType: 'custom',
-  })
+  let vite
 
-  // Use vite's connect instance as middleware. If you use your own
-  // express router (express.Router()), you should use router.use
-  app.use(vite.middlewares)
+  if (!isProd) {
+    // Create Vite server in middleware mode and configure the app type as
+    // 'custom', disabling Vite's own HTML serving logic so parent server
+    // can take control
+    vite = await createViteServer({
+      server: { middlewareMode: true },
+      appType: 'custom',
+    })
+
+    // Use vite's connect instance as middleware. If you use your own
+    // express router (express.Router()), you should use router.use
+    app.use(vite.middlewares)
+  } else {
+    app.use(express.static(path.resolve(__dirname, 'dist/client')))
+  }
 
   app.use('*', async (req, res, next) => {
     const url = req.originalUrl
