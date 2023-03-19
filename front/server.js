@@ -1,10 +1,11 @@
-import fs from 'fs'
-import path from 'path'
-import { fileURLToPath } from 'url'
+import fs from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import express from 'express'
 import { createServer as createViteServer } from 'vite'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const port = 5173
 
 async function createServer() {
   const app = express()
@@ -25,7 +26,9 @@ async function createServer() {
     // serve index.html - we will tackle this next
   })
 
-  app.listen(5173)
+  app.listen(port, () => {
+    console.log(`SSR Server started on port ${port}`)
+  })
 }
 
 createServer()
