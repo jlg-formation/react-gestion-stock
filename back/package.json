@@ -2,19 +2,24 @@
   "name": "back",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon src/server.ts",
     "build": "tsc",
-    "start:prod": "node dist/server.js",
+    "start:prod": "node --experimental-loader=extensionless dist/server.js",
     "clean": "rimraf dist",
     "lint": "eslint ."
+  },
+  "engines" : { 
+    "node" : ">=19"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
+    "extensionless": "^1.1.7",
     "serve-index": "^1.9.1"
   },
   "devDependencies": {
