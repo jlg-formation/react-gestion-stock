@@ -31,7 +31,7 @@ async function createServer() {
       let template, render
 
       if (!isProd) {
-        console.log('development mode');
+        console.log('development mode')
         // 1. Read index.html
         template = fs.readFileSync(
           path.resolve(__dirname, 'index.html'),
@@ -48,7 +48,7 @@ async function createServer() {
         //    required, and provides efficient invalidation similar to HMR.
         render = await vite.ssrLoadModule('/src/entry-server.tsx').render
       } else {
-        console.log('production mode');
+        console.log('production mode')
         // 1. Read index.html
         template = fs.readFileSync(
           path.resolve(__dirname, 'dist/client/index.html'),
